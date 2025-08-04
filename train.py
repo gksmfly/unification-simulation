@@ -15,6 +15,9 @@ import utcr
 import timer
 from logistics_calc import run_logistics_comparison
 
+plt.close('all')
+set_korean_font()
+
 # 페이지 설정
 st.set_page_config(layout="wide")
 
