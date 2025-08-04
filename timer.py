@@ -53,8 +53,12 @@ def run():
     df_after['속도(km/h)'] = pd.to_numeric(df_after['속도(km/h)'], errors='coerce')
     df_after['시간(h)'] = df_after['거리(km)'] / df_after['속도(km/h)']
 
-    # 3. 북한역 데이터
-    df_nk = pd.read_csv(file_nk, encoding='utf-8-sig')
+    # 3. 북한역 데이터 (인코딩 안전 처리)
+    try:
+        df_nk = pd.read_csv(file_nk, encoding='utf-8-sig')
+    except UnicodeDecodeError:
+        df_nk = pd.read_csv(file_nk, encoding='cp949')
+
     target_nk_stations = ['판문역', '평산역', '사리원역', '구성역', '신의주역']
     nk_filtered = df_nk[df_nk['지명'].isin(target_nk_stations)][['지명', 'Y좌표', 'X좌표']]
     nk_filtered = nk_filtered.set_index('지명').loc[target_nk_stations].reset_index()
