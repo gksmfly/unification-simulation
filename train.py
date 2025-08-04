@@ -4,6 +4,9 @@ import numpy as np
 import os
 from PIL import Image
 
+# ✅ 공통 로더 적용
+from common_loader import set_korean_font
+
 # 그래프 모듈 불러오기
 import container
 import mtcr
@@ -13,6 +16,7 @@ from logistics_calc import run_logistics_comparison
 
 # 페이지 설정
 st.set_page_config(layout="wide")
+set_korean_font()  # 폰트 적용
 st.title("남북통일 교통망 통합 시뮬레이션 플랫폼")
 
 # ----------------------------
@@ -42,9 +46,9 @@ with col2:
 st.header("4. 통일 시나리오 기반 물류비용 절감 예측")
 
 # 파일 경로 설정 (영문 파일명 사용)
-before_path = "data/before_unification.xlsx"  # 기존 '통일전전체거리비용.xlsx' → 영어명으로 변경 시 반영
-after_path = "data/after_unification.xlsx"    # 기존 '통일후전체거리비용.xlsx' → 영어명으로 변경 시 반영
-nk_path = "data/nk_station_map.csv"           # 기존 '북한지도_철도_지하철역_EPSG4326_EUC_KR.csv'
+before_path = "data/before_unification.xlsx"
+after_path = "data/after_unification.xlsx"
+nk_path = "data/nk_station_map.csv"
 
 try:
     # 물류 비교 실행
