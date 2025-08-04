@@ -15,6 +15,7 @@ else:  # Linux (Streamlit Cloud 등)
 
 mpl.rcParams['axes.unicode_minus'] = False
 
+
 # ✅ Haversine 거리 계산 (km)
 def haversine(lat1, lon1, lat2, lon2):
     R = 6371
@@ -24,9 +25,10 @@ def haversine(lat1, lon1, lat2, lon2):
     a = np.sin(dlat/2)**2 + np.cos(lat1)*np.cos(lat2)*np.sin(dlon/2)**2
     return R * 2 * np.arcsin(np.sqrt(a))
 
-# ✅ CSV 읽기 - 여러 인코딩 시도
+
+# ✅ CSV 안전하게 읽기 (인코딩 자동 판별 시도)
 def read_csv_with_fallback(path):
-    encodings_to_try = ['utf-8-sig', 'cp949', 'euc-kr', 'latin1']
+    encodings_to_try = ['utf-8-sig', 'utf-8', 'cp949', 'euc-kr', 'latin1']
     for enc in encodings_to_try:
         try:
             return pd.read_csv(path, encoding=enc)
@@ -34,7 +36,18 @@ def read_csv_with_fallback(path):
             continue
         except Exception:
             continue
+    # 최후 수단: 에러 무시하고 읽기
     return pd.read_csv(path, encoding='latin1', errors='ignore')
+
+
+# ✅ Excel 안전하게 읽기 (openpyxl 사용 강제)
+def read_excel_safe(path):
+    try:
+        return pd.read_excel(path, engine='openpyxl')
+    except UnicodeDecodeError:
+        # Excel은 보통 인코딩 문제는 거의 없지만, 예외 처리
+        return pd.read_excel(path, engine='openpyxl')
+
 
 def run():
     # 📂 파일 경로
@@ -43,7 +56,7 @@ def run():
     file_nk = 'data/nk_station_map.csv'
 
     # 1️⃣ 통일 전 데이터
-    df_before = pd.read_excel(file_before)
+    df_before = read_excel_safe(file_before)
     df_before['위도(y)'] = pd.to_numeric(df_before['위도(y)'], errors='coerce')
     df_before['경도(x)'] = pd.to_numeric(df_before['경도(x)'], errors='coerce')
     df_before['거리(km)'] = pd.to_numeric(df_before['거리(km)'], errors='coerce')
@@ -68,20 +81,20 @@ def run():
     df_before['시간(h)'] = df_before['거리(km)'] / df_before['속도(km/h)']
 
     # 2️⃣ 통일 후 데이터
-    df_after = pd.read_excel(file_after)
+    df_after = read_excel_safe(file_after)
     df_after['속도(km/h)'] = pd.to_numeric(df_after['속도(km/h)'], errors='coerce')
     df_after['시간(h)'] = df_after['거리(km)'] / df_after['속도(km/h)']
 
-    # 3️⃣ 북한 구간 데이터 (인코딩 자동 처리)
+    # 3️⃣ 북한 구간 데이터 (CSV, 인코딩 자동 처리)
     df_nk = read_csv_with_fallback(file_nk)
     target_nk_stations = ['판문역', '평산역', '사리원역', '구성역', '신의주역']
     nk_filtered = df_nk[df_nk['지명'].isin(target_nk_stations)][['지명', 'Y좌표', 'X좌표']]
     nk_filtered = nk_filtered.set_index('지명').loc[target_nk_stations].reset_index()
 
     distances = []
-    for i in range(len(nk_filtered)-1):
+    for i in range(len(nk_filtered) - 1):
         lat1, lon1 = nk_filtered.loc[i, ['Y좌표', 'X좌표']]
-        lat2, lon2 = nk_filtered.loc[i+1, ['Y좌표', 'X좌표']]
+        lat2, lon2 = nk_filtered.loc[i + 1, ['Y좌표', 'X좌표']]
         dist_km = haversine(lat1, lon1, lat2, lon2)
         distances.append(dist_km)
 
@@ -115,7 +128,7 @@ def run():
     }).round(2)
 
     # 6️⃣ 시각화
-    fig, ax = plt.subplots(figsize=(7,5))
+    fig, ax = plt.subplots(figsize=(7, 5))
     bars = ax.bar(df_compare['구분'], df_compare['총 거리(km)'], color=['#ff6b6b', '#4dabf7'], width=0.6)
 
     for i, bar in enumerate(bars):
@@ -123,9 +136,9 @@ def run():
         time_val = df_compare['총 시간(h)'][i]
         hh = int(time_val)
         mm = int(round((time_val - hh) * 60))
-        ax.text(bar.get_x() + bar.get_width()/2, height + 50,
-                 f"{hh}h {mm}m",
-                 ha='center', va='bottom', fontsize=12, fontweight='bold')
+        ax.text(bar.get_x() + bar.get_width() / 2, height + 50,
+                f"{hh}h {mm}m",
+                ha='center', va='bottom', fontsize=12, fontweight='bold')
 
     ax.set_ylabel('이동거리 (km)', fontsize=13)
     ax.set_xlabel('구분', fontsize=13)
@@ -138,6 +151,7 @@ def run():
     st.subheader("📊 부산 → 신의주 이동거리 및 소요시간 비교")
     st.pyplot(fig)
     st.dataframe(df_compare)
+
 
 if __name__ == "__main__":
     run()
