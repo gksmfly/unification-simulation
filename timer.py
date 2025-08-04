@@ -19,6 +19,10 @@ def haversine(lat1, lon1, lat2, lon2):
     return R * 2 * np.arcsin(np.sqrt(a))
 
 def run():
+    # ✅ matplotlib 설정 초기화 (그래프 꼬임 방지)
+    plt.rcParams.update(plt.rcParamsDefault)
+    set_korean_font()
+
     # 📂 파일 경로
     file_before = 'data/tongil_before.xlsx'
     file_after = 'data/tongil_after.xlsx'
@@ -116,9 +120,12 @@ def run():
     ax.grid(axis='y', linestyle='--', alpha=0.5)
     fig.tight_layout()
 
-    # Streamlit 출력
+    # ✅ 출력 후 figure 닫기
     st.subheader("📊 부산 → 신의주 이동거리 및 소요시간 비교")
     st.pyplot(fig)
+    plt.close(fig)
+
+    # 데이터프레임 표시
     st.dataframe(df_compare)
 
 if __name__ == "__main__":
