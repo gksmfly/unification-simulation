@@ -6,15 +6,20 @@ import matplotlib as mpl
 import platform
 
 # ✅ 한글 폰트 자동 설정
-if platform.system() == 'Darwin':  # macOS
+system_name = platform.system()
+
+if system_name == 'Darwin':  # macOS
     mpl.rcParams['font.family'] = 'AppleGothic'
-elif platform.system() == 'Windows':
+elif system_name == 'Windows':  # Windows
     mpl.rcParams['font.family'] = 'Malgun Gothic'
 else:  # Linux (Streamlit Cloud 등)
-    mpl.rcParams['font.family'] = 'NanumGothic'
+    # 나눔고딕 우선, 없으면 DejaVu Sans (영문 기본)
+    try:
+        mpl.rcParams['font.family'] = 'NanumGothic'
+    except:
+        mpl.rcParams['font.family'] = 'DejaVu Sans'
 
 mpl.rcParams['axes.unicode_minus'] = False
-
 
 # ✅ Haversine 거리 계산 (km)
 def haversine(lat1, lon1, lat2, lon2):
