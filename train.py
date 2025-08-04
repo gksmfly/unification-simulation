@@ -110,11 +110,12 @@ except Exception as e:
 st.header("5. 실제 지도 기반 경로 시각화")
 
 try:
-    # 파일 불러오기
-    df_pre = pd.read_excel("data/busan_qingdao_searoutes.xlsx")  # 통일 전 해상 경로 (API 기반)
-    df_post = pd.read_excel("data/Post_unification_coordinates.xlsx")  # 통일 후 육상 경로
+    # 통일 전 경로 (API 기반 해상 경로)
+    df_pre = pd.read_excel("data/busan_qingdao_searoutes.xlsx")
+    # 통일 후 경로 (육상 직통)
+    df_post = pd.read_excel("data/Post_unification_coordinates.xlsx")
 
-    # 컬럼 이름 맞추기
+    # 컬럼 이름 맞추기 (통일 후 데이터)
     if "위도(x)" in df_post.columns:
         df_post = df_post.rename(columns={"위도(x)": "위도", "경도(y)": "경도"})
 
@@ -133,7 +134,7 @@ try:
     for lat, lon in coords_post:
         folium.CircleMarker(location=[lat, lon], radius=4, color="blue", fill=True).add_to(m)
 
-    # Streamlit에 지도 표시
+    # 지도 출력
     st_folium(m, width=900, height=600)
 
 except FileNotFoundError as e:
