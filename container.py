@@ -9,9 +9,9 @@ def run():
     mpl.rcParams['axes.unicode_minus'] = False
 
     # 파일 경로
-    trade_file = 'data/통일부_남북교역_품목별_통계_20220531.csv'
-    pre_file = 'data/통일전 전체 거리 비용.xlsx'
-    post_file = 'data/통일후 전체 거리 비용.xlsx'
+    trade_file = 'unification-simulation/data/통일부_남북교역_품목별_통계_20220531.csv'
+    pre_file = 'unification-simulation/data/통일전 전체 거리 비용.xlsx'
+    post_file = 'unification-simulation/data/통일후 전체 거리 비용.xlsx'
 
     # CSV 읽기
     df_trade = pd.read_csv(trade_file, encoding='cp949')
