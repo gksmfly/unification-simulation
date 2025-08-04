@@ -11,13 +11,6 @@ import utcr
 import timer
 from logistics_calc import run_logistics_comparison
 
-st.write("📂 현재 실행 경로:", os.getcwd())
-
-if os.path.exists("data"):
-    st.write("📂 data 폴더 안 파일:", os.listdir("data"))
-else:
-    st.error("❌ data 폴더가 없습니다.")
-
 # 페이지 설정
 st.set_page_config(layout="wide")
 st.title("남북통일 교통망 통합 시뮬레이션 플랫폼")
