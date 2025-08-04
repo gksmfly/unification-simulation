@@ -110,29 +110,28 @@ except Exception as e:
 st.header("5. 실제 지도 기반 경로 시각화")
 
 try:
-    # 통일 후 / 통일 전 경로 데이터 불러오기
-    df_post = pd.read_excel("data/Post_unification_coordinates.xlsx")
-    df_pre = pd.read_excel("data/Unification_War_Coordinates.xlsx")
+    # 파일 불러오기
+    df_pre = pd.read_excel("data/busan_qingdao_searoutes.xlsx")  # 통일 전 해상 경로 (API 기반)
+    df_post = pd.read_excel("data/Post_unification_coordinates.xlsx")  # 통일 후 육상 경로
 
-    # 좌표 리스트 변환 (위도, 경도 순서)
-    coords_post = df_post[['위도(x)', '경도(y)']].values.tolist()
-    coords_pre = df_pre[['위도(x)', '경도(y)']].values.tolist()
+    # 컬럼 이름 맞추기
+    if "위도(x)" in df_post.columns:
+        df_post = df_post.rename(columns={"위도(x)": "위도", "경도(y)": "경도"})
 
-    # 지도 초기화 (중심은 한반도 중간쯤)
+    # 지도 초기화
     m = folium.Map(location=[37.5, 127.5], zoom_start=5)
 
-    # 통일 후 경로 (파란색)
-    folium.PolyLine(coords_post, color="blue", weight=4, tooltip="통일 후 경로").add_to(m)
-
     # 통일 전 경로 (빨간색)
+    coords_pre = df_pre[["위도", "경도"]].values.tolist()
     folium.PolyLine(coords_pre, color="red", weight=4, tooltip="통일 전 경로").add_to(m)
-
-    # 마커 표시
-    for lat, lon in coords_post:
-        folium.CircleMarker(location=[lat, lon], radius=4, color="blue", fill=True).add_to(m)
-
     for lat, lon in coords_pre:
         folium.CircleMarker(location=[lat, lon], radius=4, color="red", fill=True).add_to(m)
+
+    # 통일 후 경로 (파란색)
+    coords_post = df_post[["위도", "경도"]].values.tolist()
+    folium.PolyLine(coords_post, color="blue", weight=4, tooltip="통일 후 경로").add_to(m)
+    for lat, lon in coords_post:
+        folium.CircleMarker(location=[lat, lon], radius=4, color="blue", fill=True).add_to(m)
 
     # Streamlit에 지도 표시
     st_folium(m, width=900, height=600)
