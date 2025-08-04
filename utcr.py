@@ -9,6 +9,10 @@ from common_loader import set_korean_font, read_excel_safe
 set_korean_font()
 
 def run():
+    # ✅ matplotlib 설정 초기화 (그래프 꼬임 방지)
+    plt.rcParams.update(plt.rcParamsDefault)
+    set_korean_font()
+
     # ✅ 데이터 안전하게 불러오기
     df = read_excel_safe('data/logistics_tcr.xlsx')
 
@@ -40,5 +44,9 @@ def run():
     ax.grid(axis='y', linestyle='--', alpha=0.5)
     fig.tight_layout()
 
+    # ✅ 출력 후 figure 닫기 (그래프 꼬임 방지)
     st.pyplot(fig)
+    plt.close(fig)
+
+    # 데이터프레임 표시
     st.dataframe(df)
