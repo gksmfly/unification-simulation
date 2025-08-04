@@ -10,6 +10,10 @@ from common_loader import set_korean_font, read_csv_with_fallback, read_excel_sa
 set_korean_font()
 
 def run():
+    # ✅ matplotlib 설정 초기화 (그래프 꼬임 방지)
+    plt.rcParams.update(plt.rcParamsDefault)
+    set_korean_font()
+
     # 📂 파일 경로
     trade_file = 'data/trade_items_20220531.csv'
     pre_file = 'data/cost_before.xlsx'
@@ -73,4 +77,5 @@ def run():
 
     # 출력
     st.pyplot(fig)
+    plt.close(fig)  # ✅ figure 닫기 (그래프 꼬임 방지)
     st.dataframe(summary_df)
