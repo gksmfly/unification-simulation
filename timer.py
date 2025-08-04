@@ -22,10 +22,12 @@ def read_csv_with_fallback(path):
     encodings_to_try = ['utf-8-sig', 'cp949', 'euc-kr', 'latin1']
     for enc in encodings_to_try:
         try:
-            return pd.read_csv(path, encoding=enc, errors='ignore')
+            return pd.read_csv(path, encoding=enc)
         except UnicodeDecodeError:
             continue
-    raise UnicodeDecodeError("❌ CSV 파일 인코딩을 해석할 수 없습니다.")
+        except Exception:
+            continue
+    raise UnicodeDecodeError("utf-8-sig/cp949/euc-kr/latin1 모두 실패", path, 0, 0, "인코딩 불가")
 
 def run():
     # 파일 경로 (Streamlit에서는 상대경로 사용)
