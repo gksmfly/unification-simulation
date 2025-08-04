@@ -111,7 +111,7 @@ st.header("5. 실제 지도 기반 경로 시각화")
 
 try:
     # 통일 전 경로 (API 기반 해상 경로)
-    df_pre = pd.read_excel("data/busan_qingdao_searoutes.xlsx")
+    df_pre = pd.read_excel("data/unified_sea_rail_route.xlsx")
     # 통일 후 경로 (육상 직통)
     df_post = pd.read_excel("data/Post_unification_coordinates.xlsx")
 
