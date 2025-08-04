@@ -49,9 +49,9 @@ with col2:
 st.header("4. 통일 시나리오 기반 물류비용 절감 예측")
 
 # 파일 경로 설정
-before_path = "unification-simulation/data/before_unification.xlsx"
-after_path = "unification-simulation/data/after_unification.xlsx"
-nk_path = "unification-simulation/data/nk_station_map.csv"
+before_path = "data/before_unification.xlsx"
+after_path = "data/after_unification.xlsx"
+nk_path = "data/nk_station_map.csv"
 
 try:
     # 물류 비교 실행
