@@ -41,10 +41,10 @@ with col2:
 
 st.header("4. 통일 시나리오 기반 물류비용 절감 예측")
 
-# 파일 경로 설정
-before_path = "data/before_unification.xlsx"
-after_path = "data/after_unification.xlsx"
-nk_path = "data/nk_station_map.csv"
+# 파일 경로 설정 (영문 파일명 사용)
+before_path = "data/before_unification.xlsx"  # 기존 '통일전전체거리비용.xlsx' → 영어명으로 변경 시 반영
+after_path = "data/after_unification.xlsx"    # 기존 '통일후전체거리비용.xlsx' → 영어명으로 변경 시 반영
+nk_path = "data/nk_station_map.csv"           # 기존 '북한지도_철도_지하철역_EPSG4326_EUC_KR.csv'
 
 try:
     # 물류 비교 실행
