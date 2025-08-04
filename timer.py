@@ -17,6 +17,13 @@ def haversine(lat1, lon1, lat2, lon2):
     a = np.sin(dlat/2)**2 + np.cos(lat1)*np.cos(lat2)*np.sin(dlon/2)**2
     return R * 2 * np.arcsin(np.sqrt(a))
 
+def read_csv_with_fallback(path):
+    """CSV 파일을 UTF-8-SIG → CP949 순서로 시도"""
+    try:
+        return pd.read_csv(path, encoding='utf-8-sig')
+    except UnicodeDecodeError:
+        return pd.read_csv(path, encoding='cp949', errors='ignore')
+
 def run():
     # 파일 경로 (Streamlit에서는 상대경로 사용)
     file_before = 'data/tongil_before.xlsx'
@@ -53,12 +60,8 @@ def run():
     df_after['속도(km/h)'] = pd.to_numeric(df_after['속도(km/h)'], errors='coerce')
     df_after['시간(h)'] = df_after['거리(km)'] / df_after['속도(km/h)']
 
-    # 3. 북한역 데이터 (인코딩 안전 처리)
-    try:
-        df_nk = pd.read_csv(file_nk, encoding='utf-8-sig')
-    except UnicodeDecodeError:
-        df_nk = pd.read_csv(file_nk, encoding='cp949')
-
+    # 3. 북한역 데이터 (인코딩 유연하게 처리)
+    df_nk = read_csv_with_fallback(file_nk)
     target_nk_stations = ['판문역', '평산역', '사리원역', '구성역', '신의주역']
     nk_filtered = df_nk[df_nk['지명'].isin(target_nk_stations)][['지명', 'Y좌표', 'X좌표']]
     nk_filtered = nk_filtered.set_index('지명').loc[target_nk_stations].reset_index()
