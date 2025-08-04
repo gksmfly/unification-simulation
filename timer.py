@@ -4,8 +4,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
-# ✅ 한글 폰트 설정
-mpl.rcParams['font.family'] = 'Malgun Gothic'
+# ✅ 한글 폰트 설정 (환경에 따라 자동 선택)
+try:
+    mpl.rcParams['font.family'] = 'NanumGothic'  # 리눅스 서버용
+except:
+    mpl.rcParams['font.family'] = 'Malgun Gothic'  # Windows
 mpl.rcParams['axes.unicode_minus'] = False
 
 # ✅ Haversine 거리 계산 (km)
