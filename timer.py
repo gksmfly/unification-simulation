@@ -5,21 +5,22 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import platform
 
-# ✅ 한글 폰트 자동 설정
+# ✅ 한글 폰트 자동 설정 (맥/윈도우/리눅스 호환)
 system_name = platform.system()
-
 if system_name == 'Darwin':  # macOS
     mpl.rcParams['font.family'] = 'AppleGothic'
 elif system_name == 'Windows':  # Windows
     mpl.rcParams['font.family'] = 'Malgun Gothic'
 else:  # Linux (Streamlit Cloud 등)
-    # 나눔고딕 우선, 없으면 DejaVu Sans (영문 기본)
-    try:
+    # Linux에서는 NanumGothic 우선, 없으면 DejaVu Sans
+    available_fonts = set(f.name for f in mpl.font_manager.fontManager.ttflist)
+    if "NanumGothic" in available_fonts:
         mpl.rcParams['font.family'] = 'NanumGothic'
-    except:
+    else:
         mpl.rcParams['font.family'] = 'DejaVu Sans'
 
 mpl.rcParams['axes.unicode_minus'] = False
+
 
 # ✅ Haversine 거리 계산 (km)
 def haversine(lat1, lon1, lat2, lon2):
@@ -31,7 +32,7 @@ def haversine(lat1, lon1, lat2, lon2):
     return R * 2 * np.arcsin(np.sqrt(a))
 
 
-# ✅ CSV 안전하게 읽기 (인코딩 자동 판별 시도)
+# ✅ CSV 안전하게 읽기 (인코딩 자동 시도)
 def read_csv_with_fallback(path):
     encodings_to_try = ['utf-8-sig', 'utf-8', 'cp949', 'euc-kr', 'latin1']
     for enc in encodings_to_try:
@@ -41,16 +42,15 @@ def read_csv_with_fallback(path):
             continue
         except Exception:
             continue
-    # 최후 수단: 에러 무시하고 읽기
+    # 최후 수단: 에러 무시
     return pd.read_csv(path, encoding='latin1', errors='ignore')
 
 
-# ✅ Excel 안전하게 읽기 (openpyxl 사용 강제)
+# ✅ Excel 안전하게 읽기 (openpyxl 사용)
 def read_excel_safe(path):
     try:
         return pd.read_excel(path, engine='openpyxl')
-    except UnicodeDecodeError:
-        # Excel은 보통 인코딩 문제는 거의 없지만, 예외 처리
+    except Exception:
         return pd.read_excel(path, engine='openpyxl')
 
 
