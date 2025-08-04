@@ -9,6 +9,8 @@ from common_loader import set_korean_font, read_excel_safe
 set_korean_font()
 
 def run():
+    set_korean_font()  # ✅ 폰트 재적용
+    plt.close('all')
     # ✅ matplotlib 설정 초기화 (그래프 꼬임 방지)
     plt.rcParams.update(plt.rcParamsDefault)
     set_korean_font()
