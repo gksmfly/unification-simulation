@@ -3,6 +3,12 @@ import pandas as pd
 import numpy as np
 import os
 from PIL import Image
+
+# 그래프 모듈 불러오기
+import container
+import mtcr
+import utcr
+import timer
 from logistics_calc import run_logistics_comparison
 
 # 페이지 설정
@@ -10,50 +16,35 @@ st.set_page_config(layout="wide")
 st.title("남북통일 교통망 통합 시뮬레이션 플랫폼")
 
 # ----------------------------
-# SECTION 1~4: 이미지 표시
+# SECTION 1~4: 그래프 출력
 # ----------------------------
-
-# 이미지 표시 함수 (가운데 정렬)
-def centered_image(path, caption=""):
-    try:
-        img = Image.open(path)
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            st.image(img, caption=caption, use_container_width=True)
-    except:
-        st.warning(f"{caption or path} 이미지가 누락되어 있습니다.")
 
 # 1. 통일 전후 이동시간 비교
 st.header("1. 통일 전후 이동시간 비교")
-centered_image("이동시간_단축_비교.png", "통일 전후 주요 구간 이동시간 비교")
+timer.run()
 
 # 2. 통일 전후 물류비용 비교
 st.header("2. 통일 전후 물류비용 비교")
-centered_image("container.png", "물류비용 비교")
+container.run()
 
 # 3. 통일 전후 TCR 비교
 st.header("3. 통일 전후 TCR 비교")
 col1, col2 = st.columns(2)
 with col1:
-    centered_image("mtcr.png", "MTCR")
+    mtcr.run()
 with col2:
-    centered_image("utcr.png", "UTCR")
-
-# 4. 통일 후 물류비용 감소 예측
-st.header("4. 통일 후 물류비용 감소 예측")
-centered_image("timer.png", "절감 예측 타이머")
+    utcr.run()
 
 # ----------------------------
 # SECTION 5: 시나리오 기반 절감액 예측
 # ----------------------------
 
-st.header("5. 통일 시나리오 기반 물류비용 절감 예측")
+st.header("4. 통일 시나리오 기반 물류비용 절감 예측")
 
 # 파일 경로 설정
 before_path = "unification-simulation/data/before_unification.xlsx"
 after_path = "unification-simulation/data/after_unification.xlsx"
 nk_path = "unification-simulation/data/nk_station_map.csv"
-
 
 try:
     # 물류 비교 실행
