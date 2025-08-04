@@ -19,7 +19,7 @@ def run():
     plt.rcParams['axes.unicode_minus'] = False
 
     # 데이터 불러오기
-    df = pd.read_excel('data/물류tcr.xlsx')
+    df = pd.read_excel('data/logistics_tcr.xlsx')
 
     labels = df['구분'].tolist()
     distances = df['총 거리(km)'].tolist()
