@@ -126,13 +126,13 @@ try:
     coords_pre = df_pre[["위도", "경도"]].values.tolist()
     folium.PolyLine(coords_pre, color="red", weight=4, tooltip="통일 전 경로").add_to(m)
     for lat, lon in coords_pre:
-        folium.CircleMarker(location=[lat, lon], radius=4, color="red", fill=True).add_to(m)
+        folium.CircleMarker(location=[lat, lon], radius=2, color="red", fill=True).add_to(m)
 
     # 통일 후 경로 (파란색)
     coords_post = df_post[["위도", "경도"]].values.tolist()
     folium.PolyLine(coords_post, color="blue", weight=4, tooltip="통일 후 경로").add_to(m)
     for lat, lon in coords_post:
-        folium.CircleMarker(location=[lat, lon], radius=4, color="blue", fill=True).add_to(m)
+        folium.CircleMarker(location=[lat, lon], radius=2, color="blue", fill=True).add_to(m)
 
     # 지도 출력
     st_folium(m, width=900, height=600)
