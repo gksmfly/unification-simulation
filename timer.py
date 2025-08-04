@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import platform
 
-
 # ✅ 한글 폰트 자동 설정 (AppleGothic 완전히 제거)
 available_fonts = set(f.name for f in mpl.font_manager.fontManager.ttflist)
 if "NanumGothic" in available_fonts:
@@ -14,6 +13,7 @@ else:
     mpl.rcParams['font.family'] = 'DejaVu Sans'
 
 mpl.rcParams['axes.unicode_minus'] = False
+
 
 # ✅ Haversine 거리 계산 (km)
 def haversine(lat1, lon1, lat2, lon2):
@@ -35,11 +35,10 @@ def read_csv_with_fallback(path):
             continue
         except Exception:
             continue
-    # 최후 수단: 에러 무시
     return pd.read_csv(path, encoding='latin1', errors='ignore')
 
 
-# ✅ Excel 안전하게 읽기 (openpyxl 사용)
+# ✅ Excel 안전하게 읽기
 def read_excel_safe(path):
     try:
         return pd.read_excel(path, engine='openpyxl')
@@ -83,7 +82,7 @@ def run():
     df_after['속도(km/h)'] = pd.to_numeric(df_after['속도(km/h)'], errors='coerce')
     df_after['시간(h)'] = df_after['거리(km)'] / df_after['속도(km/h)']
 
-    # 3️⃣ 북한 구간 데이터 (CSV, 인코딩 자동 처리)
+    # 3️⃣ 북한 구간 데이터
     df_nk = read_csv_with_fallback(file_nk)
     target_nk_stations = ['판문역', '평산역', '사리원역', '구성역', '신의주역']
     nk_filtered = df_nk[df_nk['지명'].isin(target_nk_stations)][['지명', 'Y좌표', 'X좌표']]
