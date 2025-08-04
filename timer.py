@@ -19,9 +19,9 @@ def haversine(lat1, lon1, lat2, lon2):
 
 def run():
     # 파일 경로 (Streamlit에서는 상대경로 사용)
-    file_before = 'data/통일전 거리 속도.xlsx'
-    file_after = 'data/통일후 경의선.xlsx'
-    file_nk = 'data/북한지도_철도_지하철역_EPSG4326_EUC_KR.csv'
+    file_before = 'data/통일전거리속도.xlsx'
+    file_after = 'data/통일후경의선.xlsx'
+    file_nk = 'data/북한지도철도지하철역EPSG4326EUCKR.csv'
 
     # 1. 통일 전 데이터 불러오기
     df_before = pd.read_excel(file_before)
