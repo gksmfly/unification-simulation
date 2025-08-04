@@ -113,7 +113,7 @@ try:
     # 통일 전 경로 (API 기반 해상 경로)
     df_pre = pd.read_excel("data/busan_qingdao_searoutes.xlsx")
     # 통일 후 경로 (육상 직통)
-    df_post = pd.read_excel("data/qingdao_dandong_sinuiju_rail.xlsx")
+    df_post = pd.read_excel("data/Post_unification_coordinates.xlsx")
 
     # 컬럼 이름 맞추기 (통일 후 데이터)
     if "위도(x)" in df_post.columns:
