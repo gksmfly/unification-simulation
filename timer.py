@@ -19,8 +19,8 @@ def haversine(lat1, lon1, lat2, lon2):
 
 def run():
     # 파일 경로 (Streamlit에서는 상대경로 사용)
-    file_before = 'unification-simulation/data/통일전_거리+속도.xlsx'
-    file_after = 'unification-simulation/data/통일후_경의선.xlsx'
+    file_before = 'unification-simulation/data/통일전 거리 속도.xlsx'
+    file_after = 'unification-simulation/data/통일후 경의선.xlsx'
     file_nk = 'unification-simulation/data/북한지도_철도_지하철역_EPSG4326_EUC_KR.csv'
 
     # 1. 통일 전 데이터 불러오기
