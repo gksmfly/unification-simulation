@@ -5,15 +5,21 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import platform
 
-# ✅ 한글 폰트 자동 설정 (AppleGothic 완전히 제거)
-available_fonts = set(f.name for f in mpl.font_manager.fontManager.ttflist)
-if "NanumGothic" in available_fonts:
-    mpl.rcParams['font.family'] = 'NanumGothic'
-else:
-    mpl.rcParams['font.family'] = 'DejaVu Sans'
+# ✅ 나눔고딕 강제 적용 (없으면 설치)
+def set_korean_font():
+    try:
+        # 나눔고딕 경로 찾기
+        nanum_fonts = [f.fname for f in fm.fontManager.ttflist if 'NanumGothic' in f.name]
+        if nanum_fonts:
+            mpl.rcParams['font.family'] = 'NanumGothic'
+        else:
+            # 기본 폰트 (영문 포함)
+            mpl.rcParams['font.family'] = 'DejaVu Sans'
+    except:
+        mpl.rcParams['font.family'] = 'DejaVu Sans'
+    mpl.rcParams['axes.unicode_minus'] = False
 
-mpl.rcParams['axes.unicode_minus'] = False
-
+set_korean_font()
 
 # ✅ Haversine 거리 계산 (km)
 def haversine(lat1, lon1, lat2, lon2):
