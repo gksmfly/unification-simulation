@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 from PIL import Image
+import matplotlib.pyplot as plt
 
 # ✅ 공통 로더 적용
 from common_loader import set_korean_font
@@ -16,7 +17,11 @@ from logistics_calc import run_logistics_comparison
 
 # 페이지 설정
 st.set_page_config(layout="wide")
-set_korean_font()  # 폰트 적용
+
+# ✅ matplotlib 환경 초기화 + 폰트 적용
+plt.rcParams.update(plt.rcParamsDefault)
+set_korean_font()
+
 st.title("남북통일 교통망 통합 시뮬레이션 플랫폼")
 
 # ----------------------------
