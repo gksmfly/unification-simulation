@@ -9,7 +9,7 @@ def run():
     mpl.rcParams['axes.unicode_minus'] = False
 
     # 파일 경로
-    trade_file = 'data/통일부남북교역품목별통계_20220531.csv'
+    trade_file = 'data/통일부남북교역품목별통계20220531.csv'
     pre_file = 'data/통일전전체거리비용.xlsx'
     post_file = 'data/통일후전체거리비용.xlsx'
 
