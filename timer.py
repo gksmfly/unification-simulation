@@ -40,8 +40,8 @@ def read_csv_with_fallback(path):
             continue
         except Exception:
             continue
-    st.error(f"❌ CSV 파일 인코딩 실패: {path}")
-    return pd.DataFrame()
+    # 마지막으로 강제 읽기
+    return pd.read_csv(path, encoding='latin1', errors='ignore')
 
 # ==============================
 # ✅ 실행 함수
