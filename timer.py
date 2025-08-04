@@ -2,23 +2,11 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib as mpl
-import platform
 
-# ✅ 나눔고딕 강제 적용 (없으면 설치)
-def set_korean_font():
-    try:
-        # 나눔고딕 경로 찾기
-        nanum_fonts = [f.fname for f in fm.fontManager.ttflist if 'NanumGothic' in f.name]
-        if nanum_fonts:
-            mpl.rcParams['font.family'] = 'NanumGothic'
-        else:
-            # 기본 폰트 (영문 포함)
-            mpl.rcParams['font.family'] = 'DejaVu Sans'
-    except:
-        mpl.rcParams['font.family'] = 'DejaVu Sans'
-    mpl.rcParams['axes.unicode_minus'] = False
+# ✅ 공통 로더 가져오기
+from common_loader import set_korean_font, read_csv_with_fallback, read_excel_safe
 
+# 한글 폰트 적용
 set_korean_font()
 
 # ✅ Haversine 거리 계산 (km)
@@ -29,28 +17,6 @@ def haversine(lat1, lon1, lat2, lon2):
     dlon = lon2 - lon1
     a = np.sin(dlat/2)**2 + np.cos(lat1)*np.cos(lat2)*np.sin(dlon/2)**2
     return R * 2 * np.arcsin(np.sqrt(a))
-
-
-# ✅ CSV 안전하게 읽기 (인코딩 자동 시도)
-def read_csv_with_fallback(path):
-    encodings_to_try = ['utf-8-sig', 'utf-8', 'cp949', 'euc-kr', 'latin1']
-    for enc in encodings_to_try:
-        try:
-            return pd.read_csv(path, encoding=enc)
-        except UnicodeDecodeError:
-            continue
-        except Exception:
-            continue
-    return pd.read_csv(path, encoding='latin1', errors='ignore')
-
-
-# ✅ Excel 안전하게 읽기
-def read_excel_safe(path):
-    try:
-        return pd.read_excel(path, engine='openpyxl')
-    except Exception:
-        return pd.read_excel(path, engine='openpyxl')
-
 
 def run():
     # 📂 파일 경로
@@ -154,7 +120,6 @@ def run():
     st.subheader("📊 부산 → 신의주 이동거리 및 소요시간 비교")
     st.pyplot(fig)
     st.dataframe(df_compare)
-
 
 if __name__ == "__main__":
     run()
