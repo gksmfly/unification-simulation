@@ -5,22 +5,15 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import platform
 
-# ✅ 한글 폰트 자동 설정 (맥/윈도우/리눅스 호환)
-system_name = platform.system()
-if system_name == 'Darwin':  # macOS
-    mpl.rcParams['font.family'] = 'AppleGothic'
-elif system_name == 'Windows':  # Windows
-    mpl.rcParams['font.family'] = 'Malgun Gothic'
-else:  # Linux (Streamlit Cloud 등)
-    # Linux에서는 NanumGothic 우선, 없으면 DejaVu Sans
-    available_fonts = set(f.name for f in mpl.font_manager.fontManager.ttflist)
-    if "NanumGothic" in available_fonts:
-        mpl.rcParams['font.family'] = 'NanumGothic'
-    else:
-        mpl.rcParams['font.family'] = 'DejaVu Sans'
+
+# ✅ 한글 폰트 자동 설정 (AppleGothic 완전히 제거)
+available_fonts = set(f.name for f in mpl.font_manager.fontManager.ttflist)
+if "NanumGothic" in available_fonts:
+    mpl.rcParams['font.family'] = 'NanumGothic'
+else:
+    mpl.rcParams['font.family'] = 'DejaVu Sans'
 
 mpl.rcParams['axes.unicode_minus'] = False
-
 
 # ✅ Haversine 거리 계산 (km)
 def haversine(lat1, lon1, lat2, lon2):
