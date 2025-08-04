@@ -1,25 +1,16 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib.font_manager as fm
-import platform
-import os
+
+# ✅ 공통 로더 사용
+from common_loader import set_korean_font, read_excel_safe
+
+# 한글 폰트 적용
+set_korean_font()
 
 def run():
-    # 폰트 설정
-    if platform.system() == 'Darwin':
-        font_path = '/System/Library/Fonts/Supplemental/AppleGothic.ttf'
-    elif platform.system() == 'Windows':
-        font_path = 'C:/Windows/Fonts/malgun.ttf'
-    else:
-        font_path = '/usr/share/fonts/truetype/nanum/NanumGothicCoding.ttf'
-    if os.path.exists(font_path):
-        fm.fontManager.addfont(font_path)
-        plt.rc('font', family=fm.FontProperties(fname=font_path).get_name())
-    plt.rcParams['axes.unicode_minus'] = False
-
-    # 데이터 불러오기
-    df = pd.read_excel('data/logistics_tcr.xlsx')
+    # ✅ 데이터 안전하게 불러오기
+    df = read_excel_safe('data/logistics_tcr.xlsx')
 
     labels = df['구분'].tolist()
     distances = df['총 거리(km)'].tolist()
@@ -35,10 +26,14 @@ def run():
         hh = int(time_h)
         mm = int(round((time_h - hh) * 60))
         text = f"{height:,.0f} km\n({hh}h {mm}m)"
-        ax.text(bar.get_x() + bar.get_width() / 2,
-                height * 1.01,
-                text,
-                ha='center', va='bottom', fontsize=11)
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,
+            height * 1.01,
+            text,
+            ha='center',
+            va='bottom',
+            fontsize=11
+        )
 
     ax.set_title('통일 후 UTCR 비교', fontsize=14)
     ax.set_ylabel('총 이동 거리 (km)', fontsize=12)
