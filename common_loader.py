@@ -1,34 +1,31 @@
-import pandas as pd
 import matplotlib as mpl
 import matplotlib.font_manager as fm
+import os
 
-# ✅ CSV 안전하게 읽기
-def read_csv_with_fallback(path):
-    encodings_to_try = ['utf-8-sig', 'utf-8', 'euc-kr', 'latin1']
-    for enc in encodings_to_try:
-        try:
-            return pd.read_csv(path, encoding=enc)
-        except UnicodeDecodeError:
-            continue
-        except Exception:
-            continue
-    return pd.read_csv(path, encoding='latin1', errors='ignore')
-
-# ✅ Excel 안전하게 읽기
-def read_excel_safe(path):
-    try:
-        return pd.read_excel(path, engine='openpyxl')
-    except Exception:
-        return pd.read_excel(path, engine='openpyxl')
-
-# ✅ 한글 폰트 설정
 def set_korean_font():
-    available_fonts = set(f.name for f in fm.fontManager.ttflist)
-    if "NanumGothic" in available_fonts:
-        mpl.rcParams['font.family'] = 'NanumGothic'
+    # 항상 초기화
+    mpl.rcParams.update(mpl.rcParamsDefault)
+
+    font_path = None
+    if os.name == 'posix':
+        # macOS
+        mac_font = '/System/Library/Fonts/Supplemental/AppleGothic.ttf'
+        if os.path.exists(mac_font):
+            font_path = mac_font
+        # Linux (Streamlit Cloud 포함)
+        linux_font = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
+        if os.path.exists(linux_font):
+            font_path = linux_font
+    elif os.name == 'nt':  # Windows
+        win_font = 'C:/Windows/Fonts/malgun.ttf'
+        if os.path.exists(win_font):
+            font_path = win_font
+
+    # 폰트 적용
+    if font_path and os.path.exists(font_path):
+        fm.fontManager.addfont(font_path)
+        mpl.rcParams['font.family'] = fm.FontProperties(fname=font_path).get_name()
     else:
         mpl.rcParams['font.family'] = 'DejaVu Sans'
-    mpl.rcParams['axes.unicode_minus'] = False
 
-# 실행 시 바로 폰트 세팅
-set_korean_font()
+    mpl.rcParams['axes.unicode_minus'] = False
