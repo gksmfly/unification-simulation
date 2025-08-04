@@ -18,11 +18,14 @@ def haversine(lat1, lon1, lat2, lon2):
     return R * 2 * np.arcsin(np.sqrt(a))
 
 def read_csv_with_fallback(path):
-    """CSV 파일을 UTF-8-SIG → CP949 순서로 시도"""
-    try:
-        return pd.read_csv(path, encoding='utf-8-sig')
-    except UnicodeDecodeError:
-        return pd.read_csv(path, encoding='cp949', errors='ignore')
+    """CSV 파일을 여러 인코딩으로 시도"""
+    encodings_to_try = ['utf-8-sig', 'cp949', 'euc-kr', 'latin1']
+    for enc in encodings_to_try:
+        try:
+            return pd.read_csv(path, encoding=enc, errors='ignore')
+        except UnicodeDecodeError:
+            continue
+    raise UnicodeDecodeError("❌ CSV 파일 인코딩을 해석할 수 없습니다.")
 
 def run():
     # 파일 경로 (Streamlit에서는 상대경로 사용)
