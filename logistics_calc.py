@@ -61,10 +61,22 @@ try:
     result = run_logistics_comparison(before_path, after_path, nk_path)
 
     # ---------------------------
+    # 기존 시나리오 선택 부분 (주석 처리)
+    # ---------------------------
+    # st.sidebar.subheader(" 시나리오 선택")
+    # scenario = st.sidebar.selectbox("예측 시나리오", ["보수적", "기준", "공격적"])
+    # growth_rate_map = {
+    #     "보수적": 0.01,
+    #     "기준": 0.03,
+    #     "공격적": 0.05
+    # }
+    # growth_rate = growth_rate_map[scenario]
+    # forecast_years = st.sidebar.slider("예측 연도 수", 1, 15, 5)
+
+    # ---------------------------
     # 새 입력 UI
     # ---------------------------
     st.sidebar.header("예측 시나리오 입력")
-
     base_saving_input = st.sidebar.number_input("기준 절감액 (억원)", value=50000, step=1000)
     growth_rate = st.sidebar.slider("연평균 물류 수요 증가율 (%)", 0.0, 10.0, 2.0) / 100
     forecast_years = st.sidebar.slider("예측 연도 수", 1, 15, 5)
