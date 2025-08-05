@@ -88,7 +88,7 @@ try:
     # ---------------------------
     st.sidebar.header("예측 시나리오 입력")
     base_saving_input = st.sidebar.number_input("기준 절감액 (억원)", value=int(default_base_saving), step=1000)
-    growth_rate = st.sidebar.slider("연평균 물류 수요 증가율 (%)", 0.0, 10.0, 2.0) / 100
+    growth_rate = st.sidebar.slider("연평균 물류 수요 증가율 (%)", 0.0, 5.0, 2.0) / 100
     forecast_years = st.sidebar.slider("예측 연도 수", 1, 15, 5)
 
     # 시작 연도 고정
