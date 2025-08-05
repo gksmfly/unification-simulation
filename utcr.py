@@ -3,8 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # ✅ 공통 로더 사용
-from common_loader import read_excel_safe
-from common_font import set_korean_font  # 폰트는 common_font.py에서 관리
+from data_utils import read_csv_with_fallback, read_excel_safe
+from common_font import set_korean_font
 
 # 📌 한글 폰트 1회 적용
 set_korean_font()
