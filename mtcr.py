@@ -19,7 +19,7 @@ def run():
 
     # 📊 그래프
     fig, ax = plt.subplots(figsize=(8, 5))
-    bars = ax.bar(labels, distances, color=['#FF9999', '#99CCFF'])
+    bars = ax.bar(labels, distances, color=['#ff6b6b', '#4dabf7'])
 
     ax.set_ylim(9000, 11500)
     for i, bar in enumerate(bars):
