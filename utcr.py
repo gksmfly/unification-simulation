@@ -8,7 +8,7 @@ from common_font import set_korean_font  # 폰트 적용 함수
 def run():
     set_korean_font()
 
-    file_path = os.path.join("data", "물류_tcr.xlsx")
+    file_path = os.path.join("data", "logistics_tcr.xlsx")
 
     try:
         df = pd.read_excel(file_path)
