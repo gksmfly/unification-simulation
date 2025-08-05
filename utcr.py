@@ -24,7 +24,7 @@ def run():
 
     # 📊 그래프
     fig, ax = plt.subplots(figsize=(8, 5))
-    bars = ax.bar(labels, costs, color=['#FF9999', '#99CCFF'])
+    bars = ax.bar(labels, costs, color=['#ff6b6b', '#4dabf7'])
 
     ax.set_ylim(0, max(costs) * 1.2)
     for i, bar in enumerate(bars):
