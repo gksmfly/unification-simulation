@@ -80,7 +80,7 @@ def run():
 
     # 📊 시각화
     fig, ax = plt.subplots(figsize=(8, 6))
-    bars = ax.bar(labels, costs, color=['salmon', 'skyblue'])
+    bars = ax.bar(labels, costs, color=['#FF6666', '#66B3FF'])  # 좀 더 진한 빨강/파랑
 
     for bar, cost in zip(bars, costs):
         ax.text(
