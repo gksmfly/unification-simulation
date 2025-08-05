@@ -73,7 +73,7 @@ try:
         }
         growth_rate = growth_rate_map[scenario]
 
-        forecast_years = st.slider("📅 예측 연도 수", 1, 15, 5)
+        forecast_years = st.slider("예측 연도 수", 1, 15, 5)
 
     start_year = 2025
     years = list(range(start_year, start_year + forecast_years + 1))
