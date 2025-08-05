@@ -22,9 +22,9 @@ def run():
         st.error(f"❌ 엑셀 파일 읽기 오류: {e}")
         return
 
-    # ✅ 컬럼명 확인 후 데이터 추출
+    # ✅ 정확한 컬럼명 확인
     if "구분" not in df.columns or "총 비용(USD)" not in df.columns:
-        st.error("❌ 엑셀 컬럼명이 올바르지 않습니다. '구분', '총 비용(USD)' 컬럼이 필요합니다.")
+        st.error(f"❌ 엑셀 컬럼명이 올바르지 않습니다. 현재 컬럼명: {list(df.columns)}")
         st.dataframe(df.head())
         return
 
@@ -35,7 +35,6 @@ def run():
     fig, ax = plt.subplots(figsize=(8, 5))
     bars = ax.bar(labels, costs, color=['#FF9999', '#99CCFF'])
 
-    # y축 범위
     ax.set_ylim(0, max(costs) * 1.2)
 
     # 막대 위에 값 표시
