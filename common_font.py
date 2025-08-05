@@ -36,3 +36,5 @@ def set_korean_font():
             'font.family': 'DejaVu Sans',
             'axes.unicode_minus': False
         })
+import os
+print("폰트 경로:", FONT_PATH, "존재 여부:", os.path.exists(FONT_PATH))
