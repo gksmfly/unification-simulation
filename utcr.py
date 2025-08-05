@@ -3,18 +3,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # ✅ 공통 로더 사용
-from common_loader import set_korean_font, read_excel_safe
+from common_loader import read_excel_safe
+from common_font import set_korean_font  # 폰트는 common_font.py에서 관리
 
-# 한글 폰트 적용
+# 📌 한글 폰트 1회 적용
 set_korean_font()
 
 def run():
-    set_korean_font()  # ✅ 폰트 재적용
-    plt.close('all')
-    # ✅ matplotlib 설정 초기화 (그래프 꼬임 방지)
-    plt.rcParams.update(plt.rcParamsDefault)
-    set_korean_font()
-
     # ✅ 데이터 안전하게 불러오기
     df = read_excel_safe('data/logistics_tcr.xlsx')
 
@@ -46,9 +41,9 @@ def run():
     ax.grid(axis='y', linestyle='--', alpha=0.5)
     fig.tight_layout()
 
-    # ✅ 출력 후 figure 닫기 (그래프 꼬임 방지)
+    # ✅ 출력 후 figure 닫기
     st.pyplot(fig)
     plt.close(fig)
 
-    # 데이터프레임 표시
+    # 📄 데이터프레임 표시
     st.dataframe(df)
