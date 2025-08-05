@@ -11,7 +11,7 @@ def run():
     set_korean_font()
 
     # 📂 GitHub data 폴더 경로
-    file_path = os.path.join("data", "물류_tcr.xlsx")
+    file_path = os.path.join("data", "logistics_tcr.xlsx")  # 파일명 확인 필요
 
     try:
         df = pd.read_excel(file_path)
@@ -23,43 +23,7 @@ def run():
         return
 
     # ✅ 정확한 컬럼명 확인
-    if "구분" not in df.columns or "총 비용(USD)" not in df.columns:
-        st.error(f"❌ 엑셀 컬럼명이 올바르지 않습니다. 현재 컬럼명: {list(df.columns)}")
-        st.dataframe(df.head())
-        return
-
-    labels = df["구분"].tolist()
-    costs = df["총 비용(USD)"].tolist()
-
-    # 📊 시각화
-    fig, ax = plt.subplots(figsize=(8, 5))
-    bars = ax.bar(labels, costs, color=['#FF9999', '#99CCFF'])
-
-    ax.set_ylim(0, max(costs) * 1.2)
-
-    # 막대 위에 값 표시
-    for i, bar in enumerate(bars):
-        height = bar.get_height()
-        text = f"${height:,.0f}"
-        ax.text(
-            bar.get_x() + bar.get_width() / 2,
-            height * 1.01,
-            text,
-            ha='center', va='bottom',
-            fontsize=11
-        )
-
-    ax.set_title("통일 전후 총 물류비용 비교", fontsize=14)
-    ax.set_ylabel("총 물류비용 (USD)", fontsize=12)
-    ax.grid(axis='y', linestyle='--', alpha=0.5)
-    fig.tight_layout()
-
-    # ✅ Streamlit 출력
-    st.pyplot(fig)
-    plt.close(fig)
-
-    # 📄 데이터프레임 출력
-    st.dataframe(df)
-
-if __name__ == "__main__":
-    run()
+    expected_cols = ["구분", "총 비용(USD)"]
+    for col in expected_cols:
+        if col not in df.columns:
+            st.error(f"❌ 엑셀 컬럼명이 올바르지 않습니다. 현재 컬럼명:
