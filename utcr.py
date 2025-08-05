@@ -2,32 +2,28 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# ✅ 공통 로더 & 폰트
-from data_utils import read_excel_safe
+# ✅ 공통 폰트 적용
 from common_font import set_korean_font
+from data_utils import read_excel_safe
 
 def run():
-    # 📌 그래프 그리기 직전에 폰트 적용
+    # 📌 폰트 적용
     set_korean_font()
 
-    # ✅ 데이터 불러오기
-    df = read_excel_safe('data/logistics_tcr.xlsx')
+    # 📂 데이터 불러오기
+    df = read_excel_safe("data/logistics_tcr.xlsx")
 
     labels = df['구분'].tolist()
-    distances = df['총 거리(km)'].tolist()
-    times = df['총 시간(h)'].tolist()
+    costs = df['총 비용(USD)'].tolist()
 
-    # 📊 그래프 그리기
+    # 📊 그래프
     fig, ax = plt.subplots(figsize=(8, 5))
-    bars = ax.bar(labels, distances, color=['#FFCC99', '#99FF99'])
+    bars = ax.bar(labels, costs, color=['#FF9999', '#99CCFF'])
 
-    ax.set_ylim(9000, 11500)
+    ax.set_ylim(min(costs) * 0.95, max(costs) * 1.05)
     for i, bar in enumerate(bars):
         height = bar.get_height()
-        time_h = times[i]
-        hh = int(time_h)
-        mm = int(round((time_h - hh) * 60))
-        text = f"{height:,.0f} km\n({hh}h {mm}m)"
+        text = f"{height:,.0f} USD"
         ax.text(
             bar.get_x() + bar.get_width() / 2,
             height * 1.01,
@@ -37,14 +33,14 @@ def run():
             fontsize=11
         )
 
-    ax.set_title('통일 후 UTCR 비교', fontsize=14)
-    ax.set_ylabel('총 이동 거리 (km)', fontsize=12)
+    ax.set_title('통일 전후 UTCR 비교', fontsize=14)
+    ax.set_ylabel('총 비용 (USD)', fontsize=12)
     ax.grid(axis='y', linestyle='--', alpha=0.5)
     fig.tight_layout()
 
     # ✅ Streamlit 출력
     st.pyplot(fig)
-    plt.close(fig)  # 메모리 정리
+    plt.close(fig)
 
     # 📄 데이터프레임 표시
     st.dataframe(df)
