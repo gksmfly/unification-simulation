@@ -1,10 +1,12 @@
+import streamlit as st
 import pandas as pd
 import numpy as np
 import os
 
-
+# ---------------------------
+# 기존 run_logistics_comparison 함수 그대로 유지
+# ---------------------------
 def run_logistics_comparison(before_path, after_path, nk_path):
-    # 파일 로딩 함수 (인코딩 자동 감지 포함)
     def load_excel_or_csv(path):
         ext = os.path.splitext(path)[-1]
         try_encodings = ["utf-8-sig", "cp949", "euc-kr"]
@@ -18,41 +20,30 @@ def run_logistics_comparison(before_path, after_path, nk_path):
                 continue
         raise FileNotFoundError(f"파일을 열 수 없습니다: {path}")
 
-    # 1. 북한 역 위치 파일
     nk_df = load_excel_or_csv(nk_path)
     if not all(col in nk_df.columns for col in ["지명", "X좌표", "Y좌표"]):
         raise ValueError("❌ 북한 파일에는 '지명', 'X좌표', 'Y좌표' 컬럼이 포함되어야 합니다.")
 
-    # 북한 역 위치 딕셔너리
     coord_dict = {
         row["지명"]: (row["X좌표"], row["Y좌표"])
         for _, row in nk_df.iterrows()
     }
 
-    # 거리/속도 기반 총 소요시간 계산 함수
     def calculate_total_time(df, label):
         required_cols = ["출발역", "도착역", "거리(km)", "속도(km/h)"]
         for col in required_cols:
             if col not in df.columns:
                 raise ValueError(f"❌ '{label}' 파일에 '{col}' 컬럼이 없습니다.")
-        
-        # 문자열을 숫자로 변환 (에러 시 NaN)
         df["거리(km)"] = pd.to_numeric(df["거리(km)"], errors="coerce")
         df["속도(km/h)"] = pd.to_numeric(df["속도(km/h)"], errors="coerce")
-
         df.dropna(subset=["거리(km)", "속도(km/h)"], inplace=True)
-
-        # 시간 계산
         df["시간(h)"] = df["거리(km)"] / df["속도(km/h)"]
         total_time = df["시간(h)"].sum()
-
         return round(total_time, 2)
 
-    # 2. 통일 전 데이터
     before_df = load_excel_or_csv(before_path)
     before_total_time = calculate_total_time(before_df, "통일 전")
 
-    # 3. 통일 후 데이터
     after_df = load_excel_or_csv(after_path)
     after_total_time = calculate_total_time(after_df, "통일 후")
 
@@ -61,3 +52,49 @@ def run_logistics_comparison(before_path, after_path, nk_path):
         "통일 후 시간": after_total_time,
         "절감 시간": round(before_total_time - after_total_time, 2)
     }
+
+# ---------------------------
+# Streamlit 앱 시작
+# ---------------------------
+
+st.title("5. 통일 시나리오 기반 물류비용 절감 예측")
+
+# 파일 경로 (상황에 맞게 수정)
+before_path = "data/before_unification.xlsx"
+after_path = "data/after_unification.xlsx"
+nk_path = "data/nk_station_map.csv"
+
+try:
+    result = run_logistics_comparison(before_path, after_path, nk_path)
+
+    # ---------------------------
+    # 사용자 입력 (사이드바)
+    # ---------------------------
+    st.sidebar.header("예측 시나리오 입력")
+
+    base_saving_input = st.sidebar.number_input("기준 절감액 (억원)", value=50000, step=1000)
+    growth_rate = st.sidebar.slider("연평균 물류 수요 증가율 (%)", 0.0, 10.0, 2.0) / 100
+    forecast_years = st.sidebar.slider("예측 연도 수", 1, 15, 5)
+
+    # 시작 연도 고정
+    start_year = 2024
+    years = list(range(start_year, start_year + forecast_years + 1))
+
+    # 절감액 예측 계산
+    savings = [base_saving_input * ((1 + growth_rate) ** i) for i in range(len(years))]
+    df_forecast = pd.DataFrame({"연도": years, "절감액(억원)": savings})
+
+    # ---------------------------
+    # 시각화
+    # ---------------------------
+    st.subheader("📈 예측 결과 시각화")
+    st.line_chart(df_forecast.set_index("연도"))
+
+    # 예측 테이블
+    st.subheader("📋 예측 데이터 테이블")
+    st.dataframe(df_forecast.style.format("{:.2f}"))
+
+except FileNotFoundError as e:
+    st.error(f"❌ 파일을 찾을 수 없습니다: {e.filename}")
+except Exception as e:
+    st.error(f"❌ 예측 중 오류 발생: {e}")
