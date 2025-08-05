@@ -81,10 +81,10 @@ try:
     savings = [default_base_saving * ((1 + growth_rate) ** i) for i in range(len(years))]
     df_forecast = pd.DataFrame({"연도": years, "절감액(억원)": savings}).set_index("연도")
 
-    st.subheader("📈 예측 결과 시각화")
+    st.subheader("예측 결과 시각화")
     st.line_chart(df_forecast)
 
-    st.subheader("📋 예측 데이터 테이블")
+    st.subheader("예측 데이터 테이블")
     st.dataframe(df_forecast.style.format("{:.2f}"))
 
 except FileNotFoundError as e:
