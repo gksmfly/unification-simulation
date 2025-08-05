@@ -4,9 +4,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # ✅ 공통 로더 가져오기
-from common_loader import set_korean_font, read_csv_with_fallback, read_excel_safe
+from common_loader import read_csv_with_fallback, read_excel_safe
+from common_font import set_korean_font  # 폰트 설정은 common_font.py로 통일
 
-# 한글 폰트 적용
+# 📌 한글 폰트 1회 적용
 set_korean_font()
 
 # ✅ Haversine 거리 계산 (km)
@@ -19,12 +20,6 @@ def haversine(lat1, lon1, lat2, lon2):
     return R * 2 * np.arcsin(np.sqrt(a))
 
 def run():
-    set_korean_font()  # ✅ 폰트 재적용
-    plt.close('all')
-    # ✅ matplotlib 설정 초기화 (그래프 꼬임 방지)
-    plt.rcParams.update(plt.rcParamsDefault)
-    set_korean_font()
-
     # 📂 파일 경로
     file_before = 'data/tongil_before.xlsx'
     file_after = 'data/tongil_after.xlsx'
@@ -82,11 +77,12 @@ def run():
     df_nk_dist['시간(h)'] = df_nk_dist['거리(km)'] / df_nk_dist['속도(km/h)']
 
     # 4️⃣ 데이터 합치기
-    df_after_renamed = df_after.rename(columns={'출발역': '출발지', '도착역': '도착지'})
-    df_after_renamed = df_after_renamed[['출발지', '도착지', '거리(km)', '속도(km/h)', '시간(h)']]
-
-    df_nk_dist_renamed = df_nk_dist.rename(columns={'출발역': '출발지', '도착역': '도착지'})
-    df_nk_dist_renamed = df_nk_dist_renamed[['출발지', '도착지', '거리(km)', '속도(km/h)', '시간(h)']]
+    df_after_renamed = df_after.rename(columns={'출발역': '출발지', '도착역': '도착지'})[
+        ['출발지', '도착지', '거리(km)', '속도(km/h)', '시간(h)']
+    ]
+    df_nk_dist_renamed = df_nk_dist.rename(columns={'출발역': '출발지', '도착역': '도착지'})[
+        ['출발지', '도착지', '거리(km)', '속도(km/h)', '시간(h)']
+    ]
 
     df_after_full = pd.concat([df_after_renamed, df_nk_dist_renamed], ignore_index=True)
 
@@ -122,12 +118,11 @@ def run():
     ax.grid(axis='y', linestyle='--', alpha=0.5)
     fig.tight_layout()
 
-    # ✅ 출력 후 figure 닫기
+    # ✅ 출력
     st.subheader("📊 부산 → 신의주 이동거리 및 소요시간 비교")
     st.pyplot(fig)
     plt.close(fig)
 
-    # 데이터프레임 표시
     st.dataframe(df_compare)
 
 if __name__ == "__main__":
