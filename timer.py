@@ -3,15 +3,12 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-# ✅ 공통 로더 가져오기
+# ✅ 공통 폰트 설정 불러오기
 from data_utils import read_csv_with_fallback, read_excel_safe
 from common_font import set_korean_font
 
-# 📌 한글 폰트 1회 적용
-set_korean_font()
-
-# ✅ Haversine 거리 계산 (km)
 def haversine(lat1, lon1, lat2, lon2):
+    """Haversine 거리 계산 (km)"""
     R = 6371
     lat1, lon1, lat2, lon2 = map(np.radians, [lat1, lon1, lat2, lon2])
     dlat = lat2 - lat1
@@ -20,6 +17,9 @@ def haversine(lat1, lon1, lat2, lon2):
     return R * 2 * np.arcsin(np.sqrt(a))
 
 def run():
+    # 📌 그래프 그리기 전에 폰트 적용
+    set_korean_font()
+
     # 📂 파일 경로
     file_before = 'data/tongil_before.xlsx'
     file_after = 'data/tongil_after.xlsx'
