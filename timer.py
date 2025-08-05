@@ -4,8 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # ✅ 공통 로더 가져오기
-from common_loader import read_csv_with_fallback, read_excel_safe
-from common_font import set_korean_font  # 폰트 설정은 common_font.py로 통일
+from data_utils import read_csv_with_fallback, read_excel_safe
+from common_font import set_korean_font
 
 # 📌 한글 폰트 1회 적용
 set_korean_font()
