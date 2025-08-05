@@ -48,9 +48,9 @@ def run():
     st.pyplot(fig)
     plt.close(fig)
 
- # 📄 그래프와 같은 값만 요약표로 표시
-df_compare = pd.DataFrame({
-    "구분": df["구분"],
-    "총 물류비용 (USD)": df["총 비용(USD)"]
-})
-st.dataframe(df_compare)
+    # 📄 그래프와 같은 값만 요약표로 표시
+    df_compare = pd.DataFrame({
+        "구분": df["구분"],
+        "총 물류비용 (USD)": df["총 비용(USD)"]
+    })
+    st.dataframe(df_compare)
