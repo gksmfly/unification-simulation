@@ -113,7 +113,7 @@ def run():
 
     ax.set_ylabel('이동거리 (km)', fontsize=13)
     ax.set_xlabel('구분', fontsize=13)
-    ax.set_title('부산 → 신의주 이동거리 / 소요시간 비교', fontsize=15, fontweight='bold')
+    ax.set_title('통일전/후 부산 → 신의주 거리, 시간 비교', fontsize=15, fontweight='bold')
     ax.set_ylim(0, max(df_compare['총 거리(km)']) * 1.2)
     ax.grid(axis='y', linestyle='--', alpha=0.5)
     fig.tight_layout()
