@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 # ✅ 공통 폰트 설정 불러오기
 from common_font import set_korean_font  # 폰트는 common_font.py에서 관리
 
-# ✅ 데이터 로딩 함수 (common_loader 대체)
+# ✅ 데이터 로딩 함수
 def read_excel_safe(path):
     """엑셀 파일 안전하게 읽기"""
     try:
@@ -15,10 +15,10 @@ def read_excel_safe(path):
     except Exception as e:
         raise RuntimeError(f"엑셀 파일 읽기 실패: {path} ({e})")
 
-# 📌 한글 폰트 1회 적용
-set_korean_font()
-
 def run():
+    # 📌 그래프 그리기 전에 폰트 적용
+    set_korean_font()
+
     # ✅ 데이터 안전하게 불러오기
     df = read_excel_safe('data/logistics_tcr.xlsx')
 
