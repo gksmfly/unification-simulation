@@ -68,21 +68,30 @@ try:
     result = run_logistics_comparison(before_path, after_path, nk_path)
     time_saved = result["통일 전 시간"] - result["통일 후 시간"]
     unit_cost = 800  # 억 원/시간
-    base_saving_input = time_saved * unit_cost
+    default_base_saving = time_saved * unit_cost
 
-    # 시나리오 선택
-    st.sidebar.subheader(" 시나리오 선택")
-    scenario = st.sidebar.selectbox("예측 시나리오", ["보수적", "기준", "공격적"])
+    # ---------------------------
+    # 기존 시나리오 선택 부분 주석 처리
+    # ---------------------------
+    # st.sidebar.subheader(" 시나리오 선택")
+    # scenario = st.sidebar.selectbox("예측 시나리오", ["보수적", "기준", "공격적"])
+    # growth_rate_map = {
+    #     "보수적": 0.01,
+    #     "기준": 0.03,
+    #     "공격적": 0.05
+    # }
+    # growth_rate = growth_rate_map[scenario]
+    # forecast_years = st.sidebar.slider("예측 연도 수", 1, 15, 5)
 
-    growth_rate_map = {
-        "보수적": 0.01,
-        "기준": 0.03,
-        "공격적": 0.05
-    }
-    growth_rate = growth_rate_map[scenario]
-
-    # 예측 연도 설정
+    # ---------------------------
+    # 새 입력 UI
+    # ---------------------------
+    st.sidebar.header("예측 시나리오 입력")
+    base_saving_input = st.sidebar.number_input("기준 절감액 (억원)", value=int(default_base_saving), step=1000)
+    growth_rate = st.sidebar.slider("연평균 물류 수요 증가율 (%)", 0.0, 10.0, 2.0) / 100
     forecast_years = st.sidebar.slider("예측 연도 수", 1, 15, 5)
+
+    # 시작 연도 고정
     start_year = 2024
     years = list(range(start_year, start_year + forecast_years + 1))
 
@@ -91,11 +100,11 @@ try:
     df_forecast = pd.DataFrame({"연도": years, "절감액(억원)": savings}).set_index("연도")
 
     # 시각화
-    st.subheader(" 예측 결과 시각화 (시나리오 반영)")
+    st.subheader("📈 예측 결과 시각화")
     st.line_chart(df_forecast)
 
     # 예측 테이블
-    st.subheader(" 예측 데이터 테이블")
+    st.subheader("📋 예측 데이터 테이블")
     st.dataframe(df_forecast.style.format("{:.2f}"))
 
 except FileNotFoundError as e:
