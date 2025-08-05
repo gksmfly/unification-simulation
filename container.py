@@ -3,11 +3,30 @@ import pandas as pd
 import math
 import matplotlib.pyplot as plt
 
-# ✅ 공통 로더 & 폰트 설정 불러오기
-from common_loader import read_csv_with_fallback, read_excel_safe
+# ✅ 공통 폰트 설정 불러오기
 from common_font import set_korean_font
 
-# 한글 폰트 1회 적용
+# ✅ 데이터 로딩 함수 (common_loader 대체)
+def read_excel_safe(path):
+    """엑셀 파일 안전하게 읽기"""
+    try:
+        return pd.read_excel(path)
+    except FileNotFoundError:
+        raise
+    except Exception as e:
+        raise RuntimeError(f"엑셀 파일 읽기 실패: {path} ({e})")
+
+def read_csv_with_fallback(path):
+    """CSV 파일 인코딩 자동 감지 후 읽기"""
+    try_encodings = ["utf-8-sig", "cp949", "euc-kr"]
+    for enc in try_encodings:
+        try:
+            return pd.read_csv(path, encoding=enc)
+        except Exception:
+            continue
+    raise RuntimeError(f"CSV 파일 읽기 실패: {path}")
+
+# 📌 한글 폰트 적용 (1회만)
 set_korean_font()
 
 def run():
@@ -59,13 +78,13 @@ def run():
     labels = ['통일 전', '통일 후']
     costs = [total_pre_cost / 1e8, total_post_cost / 1e8]  # 억 원 단위
 
-    # 시각화
+    # 📊 시각화
     fig, ax = plt.subplots(figsize=(8, 6))
     bars = ax.bar(labels, costs, color=['salmon', 'skyblue'])
 
     for bar, cost in zip(bars, costs):
         ax.text(
-            bar.get_x() + bar.get_width()/2, 
+            bar.get_x() + bar.get_width() / 2, 
             cost + (cost * 0.01),
             f"{cost:,.0f} 억원", 
             ha='center', va='bottom',
@@ -78,5 +97,5 @@ def run():
 
     # 출력
     st.pyplot(fig)
-    plt.close(fig)  # ✅ figure 닫기 (그래프 꼬임 방지)
+    plt.close(fig)
     st.dataframe(summary_df)
