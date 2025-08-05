@@ -119,7 +119,7 @@ def run():
     fig.tight_layout()
 
     # ✅ 출력
-    st.subheader("📊 부산 → 신의주 이동거리 및 소요시간 비교")
+    st.subheader("부산 → 신의주 이동거리 및 소요시간 비교")
     st.pyplot(fig)
     plt.close(fig)
 
