@@ -1,10 +1,9 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 import os
 
 # ---------------------------
-# 기존 run_logistics_comparison 함수 그대로 유지
+# 기존 run_logistics_comparison 함수
 # ---------------------------
 def run_logistics_comparison(before_path, after_path, nk_path):
     def load_excel_or_csv(path):
@@ -23,11 +22,6 @@ def run_logistics_comparison(before_path, after_path, nk_path):
     nk_df = load_excel_or_csv(nk_path)
     if not all(col in nk_df.columns for col in ["지명", "X좌표", "Y좌표"]):
         raise ValueError("❌ 북한 파일에는 '지명', 'X좌표', 'Y좌표' 컬럼이 포함되어야 합니다.")
-
-    coord_dict = {
-        row["지명"]: (row["X좌표"], row["Y좌표"])
-        for _, row in nk_df.iterrows()
-    }
 
     def calculate_total_time(df, label):
         required_cols = ["출발역", "도착역", "거리(km)", "속도(km/h)"]
@@ -54,12 +48,11 @@ def run_logistics_comparison(before_path, after_path, nk_path):
     }
 
 # ---------------------------
-# Streamlit 앱 시작
+# Streamlit UI 시작
 # ---------------------------
-
 st.title("5. 통일 시나리오 기반 물류비용 절감 예측")
 
-# 파일 경로 (상황에 맞게 수정)
+# 파일 경로 (환경에 맞게 수정)
 before_path = "data/before_unification.xlsx"
 after_path = "data/after_unification.xlsx"
 nk_path = "data/nk_station_map.csv"
@@ -68,7 +61,7 @@ try:
     result = run_logistics_comparison(before_path, after_path, nk_path)
 
     # ---------------------------
-    # 사용자 입력 (사이드바)
+    # 새 입력 UI
     # ---------------------------
     st.sidebar.header("예측 시나리오 입력")
 
@@ -90,7 +83,6 @@ try:
     st.subheader("📈 예측 결과 시각화")
     st.line_chart(df_forecast.set_index("연도"))
 
-    # 예측 테이블
     st.subheader("📋 예측 데이터 테이블")
     st.dataframe(df_forecast.style.format("{:.2f}"))
 
