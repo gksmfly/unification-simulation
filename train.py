@@ -70,22 +70,37 @@ try:
     unit_cost = 800  # 억 원/시간
     default_base_saving = time_saved * unit_cost
 
-    st.sidebar.subheader("물류비용 절감액 성장률 시나리오")
-    scenario = st.sidebar.selectbox("예측 시나리오", ["보수적", "기준", "공격적"])
-    growth_rate_map = {
-         "보수적": 0.01,
-         "기준": 0.03,
-         "공격적": 0.05
-    }
-    growth_rate = growth_rate_map[scenario]
-    forecast_years = st.sidebar.slider("예측 연도 수", 1, 15, 5)
+    # ---------------------------
+    # 사이드바 UI 개선 + 설명 추가
+    # ---------------------------
+    with st.sidebar:
+        st.markdown("## 📊 통일 후 물류비용 절감액 성장률 시나리오")
+        st.markdown("""
+        **이 시나리오는 무엇인가요?**  
+        - 통일 이후 물류 인프라 개선, 경로 최적화, 운송 속도 향상 등으로  
+          **물류비용 절감액이 매년 얼마나 증가할지**에 대한 가정입니다.  
+        - 값이 높을수록 절감액 증가 속도가 빠릅니다.
+        """)
+        
+        scenario = st.selectbox(
+            "성장률 시나리오 선택",
+            ["성장률 1% (완만한 개선)", "성장률 3% (보통 개선)", "성장률 5% (빠른 개선)"]
+        )
+        growth_rate_map = {
+            "성장률 1% (완만한 개선)": 0.01,
+            "성장률 3% (보통 개선)": 0.03,
+            "성장률 5% (빠른 개선)": 0.05
+        }
+        growth_rate = growth_rate_map[scenario]
+
+        forecast_years = st.slider("📅 예측 연도 수", 1, 15, 5)
 
     # 시작 연도 고정
     start_year = 2025
     years = list(range(start_year, start_year + forecast_years + 1))
 
     # 절감액 예측 (지수 성장 기반)
-    savings = [base_saving_input * ((1 + growth_rate) ** i) for i in range(len(years))]
+    savings = [default_base_saving * ((1 + growth_rate) ** i) for i in range(len(years))]
     df_forecast = pd.DataFrame({"연도": years, "절감액(억원)": savings}).set_index("연도")
 
     # 시각화
