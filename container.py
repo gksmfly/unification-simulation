@@ -91,8 +91,8 @@ def run():
             fontsize=11, fontweight='bold'
         )
 
-    ax.set_title('부산 → 신의주 총 운송비 비교', fontsize=14, fontweight='bold')
-    ax.set_ylabel('총 운송비 (억원)')
+    ax.set_title('통일전/후 부산 → 신의주 총 운송비용 비교', fontsize=14, fontweight='bold')
+    ax.set_ylabel('총 운송비용 (억원)')
     ax.grid(axis='y', linestyle='--', alpha=0.7)
 
     # 출력
