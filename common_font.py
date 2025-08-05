@@ -15,3 +15,5 @@ def set_korean_font():
     fontprop = fm.FontProperties(fname=FONT_PATH)
     plt.rcParams['font.family'] = fontprop.get_name()
     plt.rcParams['axes.unicode_minus'] = False
+
+print("폰트 경로:", FONT_PATH, "존재 여부:", os.path.exists(FONT_PATH))
