@@ -1,4 +1,3 @@
-# common_font.py
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import os
@@ -10,7 +9,6 @@ def set_korean_font():
     """
     FONT_PATH = os.path.join(os.path.dirname(__file__), "NanumGothic.ttf")
 
-    # 폰트 파일이 실제로 존재하는지 확인
     if not os.path.exists(FONT_PATH):
         raise FileNotFoundError(f"폰트 파일을 찾을 수 없습니다: {FONT_PATH}")
 
