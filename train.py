@@ -70,7 +70,7 @@ try:
     unit_cost = 800  # 억 원/시간
     default_base_saving = time_saved * unit_cost
 
-    st.sidebar.subheader(" 시나리오 선택")
+    st.sidebar.subheader("물류비용 절감액 성장률 시나리오")
     scenario = st.sidebar.selectbox("예측 시나리오", ["보수적", "기준", "공격적"])
     growth_rate_map = {
          "보수적": 0.01,
