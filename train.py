@@ -6,8 +6,8 @@ import folium
 from streamlit_folium import st_folium
 
 # ✅ 공통 로더 & 폰트 적용
-from common_loader import read_excel_safe  # 데이터 로딩 유틸
-from common_font import set_korean_font   # 폰트 적용 유틸
+from data_utils import read_csv_with_fallback, read_excel_safe
+from common_font import set_korean_font
 
 # 그래프 모듈
 import container
