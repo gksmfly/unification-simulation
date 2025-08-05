@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 # ✅ 공통 폰트 설정 불러오기
 from common_font import set_korean_font
 
-# ✅ 데이터 로딩 함수 (common_loader 대체)
+# ✅ 데이터 로딩 함수
 def read_excel_safe(path):
     """엑셀 파일 안전하게 읽기"""
     try:
@@ -26,10 +26,10 @@ def read_csv_with_fallback(path):
             continue
     raise RuntimeError(f"CSV 파일 읽기 실패: {path}")
 
-# 📌 한글 폰트 적용 (1회만)
-set_korean_font()
-
 def run():
+    # 📌 그래프 그리기 전에 한 번만 폰트 적용
+    set_korean_font()
+
     # 📂 파일 경로
     trade_file = 'data/trade_items_20220531.csv'
     pre_file = 'data/cost_before.xlsx'
@@ -84,9 +84,9 @@ def run():
 
     for bar, cost in zip(bars, costs):
         ax.text(
-            bar.get_x() + bar.get_width() / 2, 
+            bar.get_x() + bar.get_width() / 2,
             cost + (cost * 0.01),
-            f"{cost:,.0f} 억원", 
+            f"{cost:,.0f} 억원",
             ha='center', va='bottom',
             fontsize=11, fontweight='bold'
         )
