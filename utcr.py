@@ -39,7 +39,7 @@ def run():
             fontsize=11
         )
 
-    ax.set_title('통일 전후 총 물류비용 비교', fontsize=14)
+    ax.set_title('통일전/후 총 물류비용 비교', fontsize=14)
     ax.set_ylabel('총 물류비용 (USD)', fontsize=12)
     ax.grid(axis='y', linestyle='--', alpha=0.5)
     fig.tight_layout()
