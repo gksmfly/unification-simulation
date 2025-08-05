@@ -3,19 +3,14 @@ import pandas as pd
 import math
 import matplotlib.pyplot as plt
 
-# ✅ 공통 로더 사용
-from common_loader import set_korean_font, read_csv_with_fallback, read_excel_safe
+# ✅ 공통 로더 & 폰트 설정 불러오기
+from common_loader import read_csv_with_fallback, read_excel_safe
+from common_font import set_korean_font
 
-# 한글 폰트 적용
+# 한글 폰트 1회 적용
 set_korean_font()
 
 def run():
-    set_korean_font()  # ✅ 폰트 재적용
-    plt.close('all')
-    # ✅ matplotlib 설정 초기화 (그래프 꼬임 방지)
-    plt.rcParams.update(plt.rcParamsDefault)
-    set_korean_font()
-
     # 📂 파일 경로
     trade_file = 'data/trade_items_20220531.csv'
     pre_file = 'data/cost_before.xlsx'
@@ -69,9 +64,13 @@ def run():
     bars = ax.bar(labels, costs, color=['salmon', 'skyblue'])
 
     for bar, cost in zip(bars, costs):
-        ax.text(bar.get_x() + bar.get_width()/2, cost + (cost * 0.01),
-                f"{cost:,.0f} 억원", ha='center', va='bottom',
-                fontsize=11, fontweight='bold')
+        ax.text(
+            bar.get_x() + bar.get_width()/2, 
+            cost + (cost * 0.01),
+            f"{cost:,.0f} 억원", 
+            ha='center', va='bottom',
+            fontsize=11, fontweight='bold'
+        )
 
     ax.set_title('부산 → 신의주 총 운송비 비교', fontsize=14, fontweight='bold')
     ax.set_ylabel('총 운송비 (억원)')
