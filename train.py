@@ -48,10 +48,8 @@ after_path = "data/after_unification.xlsx"
 nk_path = "data/nk_station_map.csv"
 
 try:
-    result = run_logistics_comparison(before_path, after_path, nk_path)
-    time_saved = result["통일 전 시간"] - result["통일 후 시간"]
-    unit_cost = 800  # 억 원/시간
-    default_base_saving = time_saved * unit_cost
+    # ✅ 초기 절감액(원) 고정
+    initial_saving_won = 1594170592300  # 1,594,170,592,300 원 (약 1.594조 원)
 
     with st.sidebar:
         st.sidebar.subheader("물류비용 절감률 상승 시나리오")
@@ -61,7 +59,7 @@ try:
           물류비용 절감액이 매년 얼마나 증가할지에 대한 가정입니다.  
         - 값이 높을수록 절감액 증가 속도가 빠릅니다.
         """)
-        
+
         scenario = st.selectbox(
             "절감률 상승 시나리오 선택",
             ["절감률 상승 1% (완만한 개선)", "절감률 상승 3% (보통 개선)", "절감률 상승 5% (빠른 개선)"]
@@ -75,11 +73,15 @@ try:
 
         forecast_years = st.slider("예측 연도 수", 1, 15, 5)
 
+    # ✅ 연도 생성
     start_year = 2025
     years = list(range(start_year, start_year + forecast_years + 1))
 
-    savings = [default_base_saving * ((1 + growth_rate) ** i) for i in range(len(years))]
-    df_forecast = pd.DataFrame({"연도": years, "절감액(억원)": savings}).set_index("연도")
+    # ✅ 절감액 계산 (억 원 단위 변환)
+    savings_won = [initial_saving_won * ((1 + growth_rate) ** i) for i in range(len(years))]
+    savings_억원 = [s / 1e8 for s in savings_won]
+
+    df_forecast = pd.DataFrame({"연도": years, "절감액(억원)": savings_억원}).set_index("연도")
 
     st.subheader("예측 결과 시각화")
     st.line_chart(df_forecast)
@@ -91,7 +93,7 @@ except FileNotFoundError as e:
     st.error(f"❌ 파일을 찾을 수 없습니다: {e.filename}")
 except Exception as e:
     st.error(f"❌ 예측 중 오류 발생: {e}")
-
+    
 # ----------------------------
 # SECTION 5: 실제 지도 기반 경로 시각화
 # ----------------------------
