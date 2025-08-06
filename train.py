@@ -83,8 +83,18 @@ try:
 
     df_forecast = pd.DataFrame({"연도": years, "절감액(억원)": savings_억원}).set_index("연도")
 
+    # ✅ Matplotlib 그래프
+    import matplotlib.pyplot as plt
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.plot(df_forecast.index, df_forecast["절감액(억원)"], marker="o", color="blue", linewidth=2)
+
+    ax.set_title("통일 시나리오 기반 물류비용 절감 예측", fontsize=14)
+    ax.set_xlabel("연도", fontsize=12)
+    ax.set_ylabel("절감액 (억원)", fontsize=12)  # ← 단위 명시
+    ax.grid(True, linestyle="--", alpha=0.5)
+
     st.subheader("예측 결과 시각화")
-    st.line_chart(df_forecast)
+    st.pyplot(fig)
 
     st.subheader("예측 데이터 테이블")
     st.dataframe(df_forecast.style.format("{:.2f}"))
